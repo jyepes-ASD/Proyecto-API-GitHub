@@ -4,9 +4,8 @@ Este proyecto es para explotar la información de la empresa Grupo ASD junto con
 
 ## Tabla de contenido
 1. [Descripción](#descripción)
-2. [Uso](#uso)
-3. [Instalación](#instalación)
-4. [Probleas_Comunes](#Probleas_Comunes)
+2. [Instalación](#instalación)
+3. [Probleas_Comunes](#Probleas_Comunes)
 
 ## Descripción
 
@@ -17,9 +16,18 @@ Este proyecto es para hacer funcionalidades y automatizaciones que no tenga el p
 - Estadísticas de Repositorios
 - Dependabot
 
-## Uso
 
-Primero debeos hacer un fichero llamado token_1.py en la carpeta PROYECTO y copia esta sintaxis
+
+## Instalación
+
+Instrucciones paso a paso para configurar y ejecutar el proyecto en un entorno local.
+
+# Clonar el repositorio
+```bash
+git clone https://github.com/jyepes-ASD/Proyecto-API-GitHub.git
+```
+
+Ahora debemos hacer un fichero llamado __token_1.py__ en la carpeta __Proyecto-API-GitHub__ y copia esta sintaxis
 
 ```bash
 
@@ -31,7 +39,7 @@ my_git = Github(mytoken)
 
 ```
 
-Luego crea otro ficherro llamado .env en la carpeta PROYECTO
+Luego crea otro ficherro llamado __.env__ en la carpeta __Proyecto-API-GitHub__ 
 ```bash
 
 GITHUB_CLIENT_ID=Ov23li3cAP3apdW0y0qy
@@ -40,16 +48,9 @@ SECRET_KEY=Colombia2024*
 
 ```
 
-## Instalación
-
-Instrucciones paso a paso para configurar y ejecutar el proyecto en un entorno local.
-
-# Clonar el repositorio
-```bash
-git clone https://github.com/jyepes-ASD/Proyecto-API-GitHub.git
-```
-
 # Navegar al directorio del proyecto
+
+En Visual Studio Code dale el comando de __control + ñ__ y ahi te enviara a la consola con la ruta del proyecto 
 
 ```bash
 cd Proyecto-API-GitHub
