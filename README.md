@@ -19,9 +19,10 @@ Este proyecto es para hacer funcionalidades y automatizaciones que no tenga el p
 
 Instrucciones paso a paso para configurar y ejecutar el proyecto en un entorno local.
 
+### Clonar el repositorio
 ```bash
-# Clonar el repositorio
 git clone https://github.com/jyepes-ASD/Proyecto-API-GitHub.git
+```
 
 # Navegar al directorio del proyecto
 cd Proyecto-API-GitHub
