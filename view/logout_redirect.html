@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logging Out...</title>
+    <script>
+        window.onload = function() {
+            // Abrir la ventana de logout de GitHub
+            const logoutWindow = window.open("https://github.com/logout", "githubLogoutWindow", "width=500,height=600");
+            
+            // Esperar un momento para asegurarse de que la ventana se ha abierto y el usuario se ha desconectado
+            setTimeout(function() {
+                if (logoutWindow) {
+                    logoutWindow.close(); // Cerrar la ventana de GitHub
+                }
+                window.location.href = "http://127.0.0.1:8000/"; // Redirigir a la página de inicio de sesión
+            }, 4000);
+        };
+    </script>
+</head>
+<body>
+    <h1>Logging out...</h1>
+</body>
+</html>

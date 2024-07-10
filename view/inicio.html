@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="brand">Mi Sitio</a>
+            <ul class="nav-links">
+                <li><a href="/repos">Repositorios</a></li>
+                <li><a href="/repos/colaboradores">Colaboradores</a></li>
+                <li><a href="/repos/pulls">Pull Request</a></li>
+                <li><a href="/repos/issues">Issues</a></li>
+                <li><a href="/docs">docs</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="content">
+        {% if user %}
+            <p>Usuario: {{ user }}</p>
+            <a href="#" onclick="logout()">Cerrar sesión</a>
+            <form id="logout-form" action="/logout" method="get" style="display: none;"></form>
+        {% else %}
+            <p>No estás autenticado</p>
+            <a href="/login">Iniciar sesión con GitHub</a>
+        {% endif %}
+    </div>
+    <script>
+        function logout() {
+            document.getElementById('logout-form').submit();
+        }
+    </script>
+</body>
+</html>
