@@ -23,7 +23,7 @@ app.include_router(login_router.logging_router, tags=["Sesión"])
 app.include_router(repositories_router.repository_router, tags=["Repositorio"])
 # Incluir el router de usuarios:
 app.include_router(user_router.user_router, tags=["Usuario"])
-
+# Incluir el router de equipos:
 app.include_router(teams_router.teams_router, tags=["Teams"])
 
 templates = Jinja2Templates(directory="./view")

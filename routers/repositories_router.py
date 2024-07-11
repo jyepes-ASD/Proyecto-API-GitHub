@@ -1,7 +1,6 @@
 from typing import List
-from datetime import datetime, timedelta
-from fastapi import HTTPException, Request, APIRouter, Path, Query
-from fastapi.responses import HTMLResponse, JSONResponse
+from datetime import datetime
+from fastapi import HTTPException, APIRouter
 from github import Github
 from token_1 import my_git
 from datetime import datetime, timedelta
@@ -10,9 +9,7 @@ from models.repository_model import (
                                          RepositoriesStats,
                                          Repository,
                                          RepositoryStats,)
-                                        #  RepositoryDetail,
-                                        #  RepositoryDetailStats,
-                                        # Stats)
+                        
 
 
 repository_router = APIRouter()
@@ -25,38 +22,51 @@ owner = user.login
 
 # MEJORAR LAS 2 FUNCIONES: 
 def get_last_commit_date(repository):
-    commits = repository.get_commits()
-    if commits.totalCount > 0:
-        last_commit = commits[0]
-        return last_commit.commit.committer.date
-    else:
-        return None
+    try:
+        commits = repository.get_commits()
+        if commits.totalCount > 0:
+            last_commit = commits[0]
+            return last_commit.commit.committer.date
+        else:
+            return None
+    except Exception as e:
+        print(f"Error al obtener commits del repositorio: {str(e)}")
+        
 
 def get_repository_state(repository):
-    fecha_actual = datetime.now()
-    date_last_commit = get_last_commit_date(repository)
-    if date_last_commit:
-        diferencia_meses = (
-            fecha_actual.year - date_last_commit.year
-        ) * 12 + fecha_actual.month - date_last_commit.month
-        if diferencia_meses >= 5:
-            return "Inactivo"
+    try:
+        fecha_actual = datetime.now()
+        date_last_commit = get_last_commit_date(repository)
+        if date_last_commit:
+            diferencia_meses = (
+                fecha_actual.year - date_last_commit.year
+            ) * 12 + fecha_actual.month - date_last_commit.month
+            if diferencia_meses >= 5:
+                return "Inactivo"
+            else:
+                return "Activo"
         else:
-            return "Activo"
-    else:
-        return "No hay commits"
+            return "No hay commits"
+    except Exception as e:
+        print(f"Error al obtener commits del repositorio: {str(e)}")
+
     
 def count_state_repositories(repos):
-    active_count = 0
-    inactive_count = 0
-
-    for repository in repos:
-        state = get_repository_state(repository)
-        if state == "Activo":
-            active_count += 1
-        elif state == "Inactivo":
-            inactive_count += 1
-    return active_count, inactive_count
+    try:
+        active_count = 0
+        inactive_count = 0
+        for repository in repos:
+            state = get_repository_state(repository)
+            if state == "Activo":
+                active_count += 1
+            elif state == "Inactivo":
+                inactive_count += 1
+            else:
+                state == "No hay commits"
+        return active_count, inactive_count
+    except Exception as e:
+        print(f"Error al obtener commits del repositorio: {str(e)}")
+        
 
 
 # TRAER TODOS LOS REPOSITORIOS DEL GITHUB (FUNCIONA CORRECTAMENTE):
@@ -80,7 +90,8 @@ def get_repositories():
         return repositories
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al obtener repositorios: {e}")
+        raise HTTPException(status_code=500, detail=f"Error al obtener commits del repositorio: {e}")
+    
     
 
 # ESTADISTICAS DE LOS REPOSITORIOS:
@@ -129,9 +140,7 @@ def get_statistics_of_repositories():
             percentages = [f"{lang}: {percentage:.2f}%" for lang, percentage in languages_percentages.items()]
 
         # Numero de repositorios activos e inactivos
-        active_count = count_state_repositories(repos)
-        inactive_count = count_state_repositories(repos)
-        # states.append(f"Activos: {active_count[0]} --- Inactivos: {inactive_count[1]}")
+        active_e_inactive_count = count_state_repositories(repos)
 
         # Numero de colaboradores:
         set_collaborators = set(collaborators_count)    
@@ -139,8 +148,8 @@ def get_statistics_of_repositories():
 
         return RepositoriesStats(
             repositories=repos.totalCount,
-            repositoriesActives=active_count[0],
-            repositoriesInactives=active_count[1],
+            repositoriesActives=active_e_inactive_count[0],
+            repositoriesInactives=active_e_inactive_count[1],
             prsOpen=len(prs_open_count),
             prsClosed=len(prs_closed_count),
             prsDependabot=dependabot_pr_count,  
