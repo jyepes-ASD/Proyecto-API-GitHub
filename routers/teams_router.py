@@ -18,7 +18,7 @@ repos = user.get_repos()
 owner = user.login
 
 
-@teams_router .get("/orgs/{org_name}/teams", response_model=TeamsResponse)
+@teams_router.get("/orgs/{org_name}/teams", response_model=TeamsResponse)
 def get_teams(org_name: str):
     try:
         org = my_git.get_organization(org_name)

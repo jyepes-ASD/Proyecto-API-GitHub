@@ -11,8 +11,8 @@ class Repositories(BaseModel):
     name: str
     owner: str
     state: str
-    createDate: datetime
-    lastUseDate: datetime
+    createDate: Optional[datetime]
+    lastUseDate: Optional[datetime]
 
     
 class RepositoriesStats(BaseModel):
