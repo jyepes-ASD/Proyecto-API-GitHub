@@ -1,10 +1,6 @@
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from pydantic import BaseModel
-
-
-
-
 
 # CLASES PARA TODOS LOS REPOSITORIOS Y SUS ESTADISTICAS:
 class Repositories(BaseModel):
@@ -14,7 +10,6 @@ class Repositories(BaseModel):
     createDate: Optional[datetime]
     lastUseDate: Optional[datetime]
 
-    
 class RepositoriesStats(BaseModel):
     repositories: Optional[int]
     repositoriesActives: Optional[int]
@@ -24,20 +19,18 @@ class RepositoriesStats(BaseModel):
     prsDependabot: Optional[int]
     collaborators: Optional[int]
     issues: Optional[int]
-    percentages_languages: Optional[list]
-            
+    percentages_languages: Optional[List[str]]
 
 # CLASES PARA LOS DETALLES DEL REPOSITORIO Y SUS RESPECTIVAS ESTADISTICAS:
 class Repository(BaseModel):
     name: str
     description: Optional[str]
-    collaborators: Optional[list]
-    prsOpen: Optional[list]
-    prsClosed: Optional[list]
-    prsDependabot: Optional[dict[str, list[dict[str, str]]]]
-    issuesDetails: Optional[list]
-    branchesDetails: Optional[list]
-
+    collaborators: List[str]
+    prsOpen: List[str]
+    prsClosed: List[str]
+    prsDependabot: Dict[str, List[Dict[str, Any]]]
+    issuesDetails: List[str]
+    branchesDetails: List[str]
 
 class RepositoryStats(BaseModel):
     collaborators: Optional[int]
@@ -46,6 +39,4 @@ class RepositoryStats(BaseModel):
     prsDependabot: Optional[int]
     issues: Optional[int]
     branches: Optional[int]
-    percentagesLanguages: Optional[list]
-
-
+    percentagesLanguages: Optional[List[str]]
