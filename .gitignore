@@ -5,3 +5,9 @@ token_1.py
 /router/__pycache__
 /routers/__pycache__
 __pycache__
+.coverage
+tests
+/models/__init__.py
+/routers/__init__.py
+htmlcov
+.pytest_cache
