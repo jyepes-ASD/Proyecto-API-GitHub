@@ -5,8 +5,8 @@ from app.models.teams_model import TeamsResponse
 
 teams_router = APIRouter()
 
-@teams_router.get("/orgs/{org_name}/teams", response_model=TeamsResponse)
-def get_teams(org_name: str):
+@teams_router.get("/orgs/teams", response_model=TeamsResponse)
+def get_teams():
     """
     Obtiene todos los equipos de una organización en GitHub.
     Args:
@@ -15,7 +15,7 @@ def get_teams(org_name: str):
         TeamsResponse: Una respuesta con la lista de equipos y sus detalles.
     """
     try:
-        return teams_service.get_teams(org_name)
+        return teams_service.get_teams()
     except HTTPException as e:
         raise e
     except Exception as e:

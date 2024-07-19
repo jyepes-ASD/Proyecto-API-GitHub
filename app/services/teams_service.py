@@ -4,6 +4,12 @@ from fastapi import HTTPException, APIRouter
 from github import Github
 from token_1 import my_git
 from app.models.teams_model import TeamsResponse, Team, Member
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+ORG_NAME = os.getenv("ORG_NAME")
 
 teams_router = APIRouter()
 
@@ -12,9 +18,9 @@ class TeamsService:
     def __init__(self):
         self.github_client = my_git
 
-    def get_teams(self, org_name: str) -> TeamsResponse:
+    def get_teams(self) -> TeamsResponse:
         try:
-            org = self.github_client.get_organization(org_name)
+            org = self.github_client.get_organization(ORG_NAME)
             teams = org.get_teams()
             teams_list = []
 
@@ -23,16 +29,18 @@ class TeamsService:
                 members_list = [Member(id=member.id, login=member.login) for member in members]
                 members_count = len(members_list)
                 teams_list.append(Team(id=team.id, name=team.name, members_count=members_count, members=members_list))
+                
+            total_teams = len(teams_list)
 
-            return TeamsResponse(teams=teams_list)
+            return TeamsResponse(total_teams=total_teams, teams=teams_list)
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error al obtener los equipos: {e}")
 
 # Crear una instancia del servicio
 teams_service = TeamsService()
 
-@teams_router.get("/orgs/{org_name}/teams", response_model=TeamsResponse)
-def get_teams(org_name: str):
+@teams_router.get("/orgs/teams", response_model=TeamsResponse)
+def get_teams():
     """
     Obtiene todos los equipos de una organización en GitHub.
     Args:
@@ -41,7 +49,7 @@ def get_teams(org_name: str):
         TeamsResponse: Una respuesta con la lista de equipos y sus detalles.
     """
     try:
-        return teams_service.get_teams(org_name)
+        return teams_service.get_teams()
     except HTTPException as e:
         raise e
     except Exception as e:

@@ -14,4 +14,5 @@ class Team(BaseModel):
     members: List[Member]
  
 class TeamsResponse(BaseModel):
+    total_teams: int
     teams: list[Team]
