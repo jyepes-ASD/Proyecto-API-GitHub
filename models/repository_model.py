@@ -28,9 +28,10 @@ class Repository(BaseModel):
     collaborators: List[str]
     prsOpen: List[str]
     prsClosed: List[str]
-    prsDependabot: Dict[str, List[Dict[str, Any]]]
+    prsDependabot: List[str]
     issuesDetails: List[str]
     branchesDetails: List[str]
+    languagesPercentage: List[str]
 
 class RepositoryStats(BaseModel):
     collaborators: Optional[int]
