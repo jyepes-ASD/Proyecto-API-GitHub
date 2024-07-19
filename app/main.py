@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
-from routers import login_router, repositories_router, user_router, teams_router
+from app.routers import login_router, repositories_router, user_router, teams_router
 from starlette.middleware.sessions import SessionMiddleware
 import os
 from dotenv import load_dotenv
