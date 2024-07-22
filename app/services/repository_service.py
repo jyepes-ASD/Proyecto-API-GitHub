@@ -14,7 +14,6 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 repository_router = APIRouter()
 
 class RepositoryService:
-
     def __init__(self):
         self.github_client = my_git
 
@@ -92,11 +91,12 @@ class RepositoryService:
 
                 prs_closed = repository.get_pulls(state="closed")
                 prs_closed_count.extend(prs_closed)
-
-                collaborators = repository.get_collaborators()
-                for collaborator in collaborators:
-                    collaborators_count.add(collaborator.login)
-
+                try:
+                    collaborators = repository.get_collaborators()
+                    for collaborator in collaborators:
+                        collaborators_count.add(collaborator.login)
+                except Exception as e:
+                    print(f"error: {e}")
                 pull_requests = repository.get_pulls(state="all")
                 dependabot_prs = [pr for pr in pull_requests if pr.user.login.startswith("dependabot")]
                 dependabot_pr_count += len(dependabot_prs)
@@ -154,10 +154,12 @@ class RepositoryService:
                     for br in repository.get_branches()
                 ]
 
-                issues_list = [
-                    f"El problema #{iss.number} Titulo: {iss.title} --- Descripción: {iss.body} --- Tipo: {', '.join([label.name for label in iss.labels])}"
-                    for iss in repository.get_issues()
-                ]
+                issues_list = []
+                for iss in repository.get_issues():
+                    labels = [label.name for label in iss.labels]
+                    issues_list.append(
+                        f"El problema #{iss.number} Titulo: {iss.title} --- Descripción: {iss.body} --- Tipo: {', '.join(labels)}"
+                    )
 
                 langs = repository.get_languages()
                 total_bytes = sum(langs.values())
@@ -214,8 +216,8 @@ class RepositoryService:
                 branches=branches_total,
                 percentagesLanguages=percentages,
             )
-        except StarletteHTTPException:
-            raise
+        except StarletteHTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error al obtener estadísticas detalladas del repositorio: {e}")
 

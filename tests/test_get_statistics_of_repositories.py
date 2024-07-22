@@ -73,3 +73,27 @@ def test_get_statistics_of_repositories_exception(mock_get_repositories_from_git
     
     assert exc_info.value.status_code == 500
     assert str(exc_info.value.detail) == "Error al obtener estadísticas del repositorio: Error al obtener repositorios"
+
+@patch('app.services.repository_service.RepositoryService.get_repositories_from_github')
+def test_get_statistics_of_repositories_collaborators_exception(mock_get_repositories_from_github, mock_repositories, capsys):
+    # Mock para simular una excepción al obtener colaboradores
+    repo_with_error = MagicMock()
+    repo_with_error.name = "repo_with_error"
+    repo_with_error.owner.login = "owner_with_error"
+    repo_with_error.created_at = datetime(2023, 3, 1)
+    repo_with_error.get_issues.return_value = []
+    repo_with_error.get_pulls.side_effect = lambda state: []
+    repo_with_error.get_collaborators.side_effect = Exception("Error al obtener colaboradores")
+    repo_with_error.get_languages.return_value = {}
+
+    # Añadir el repo_with_error al mock_repositories
+    mock_repositories.__iter__.return_value = iter([repo_with_error])
+    mock_get_repositories_from_github.return_value = mock_repositories
+
+    service = RepositoryService()
+    stats = service.get_statistics_of_repositories()
+
+
+    assert stats.collaborators == 0  
+    captured = capsys.readouterr()
+    assert "Error al obtener colaboradores" in captured.out  

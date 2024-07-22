@@ -87,22 +87,20 @@ class UserService:
             raise HTTPException(status_code=500, detail=f"Error al obtener eventos del usuario: {e}")
 
     def get_perfil_info(self, user: Github) -> dict:
-        try:
             profile = {
                 "login": user.login,
-                "nombre": user.name or user.login,
-                "avatar_url": user.avatar_url or "no disponible",
-                "bio": user.bio or "no disponible",
-                "ubicacion": user.location or "no disponible",
-                "blog": user.blog or "no disponible",
-                "email": user.email or "no disponible",
+                "nombre": user.name if user.name else user.login,
+                "avatar_url": user.avatar_url if user.avatar_url else "no disponible",
+                "bio": user.bio if user.bio else "no disponible",
+                "ubicacion": user.location if user.location else "no disponible",
+                "blog": user.blog if user.blog else "no disponible",
+                "email": user.email if user.email else "no disponible",
                 "public_repos": user.public_repos,
                 "creacion": user.created_at,
                 "actualizacion": user.updated_at,
             }
             return profile
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Error al obtener la información del perfil: {e}")
+        
 
 # Crear una instancia del servicio
 user_service = UserService()

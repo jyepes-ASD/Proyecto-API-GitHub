@@ -1,18 +1,7 @@
+# app/models/user_model.py
 from datetime import datetime
 from typing import Dict, List, Optional
 from pydantic import BaseModel
-
-
-
-'''
-class Users(BaseModel):
-    username: set
-    # repositories: list
-    # repositories: int
-    # mainlanguage: str
-    # # rank: int
-'''
-
 
 class UserStats(BaseModel):
     repos_count: int
@@ -30,7 +19,6 @@ class Event(BaseModel):
     org: Optional[str]
     disk: Optional[int]
 
-
 class User(BaseModel):
     username: str
     fullname: str
@@ -40,10 +28,3 @@ class User(BaseModel):
     actionscontributions: list
     usedlanguages: list 
     teams: list
-
-# class UserStats(BaseModel):
-#     repositories: int
-#     actionsday: int
-#     contributionsrepositories: int
-#     usedlanguages: int
-#     teams: int

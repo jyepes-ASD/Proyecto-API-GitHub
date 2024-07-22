@@ -23,6 +23,7 @@ def mock_repositories():
 
     issue1 = MagicMock(number=fake.random_int(), title=fake.sentence(), body=fake.text())
     issue1.labels = [MagicMock(name="bug")]
+    issue1.labels[0].name = "bug"  # Asegúrate de que el nombre del label sea una cadena
     repo1.get_issues.return_value = [issue1]
 
     repo1.get_languages.return_value = {"Python": fake.random_int(min=1000, max=5000), "JavaScript": fake.random_int(min=1000, max=5000)}
@@ -41,6 +42,7 @@ def mock_repositories():
 
     issue2 = MagicMock(number=fake.random_int(), title=fake.sentence(), body=fake.text())
     issue2.labels = [MagicMock(name="enhancement")]
+    issue2.labels[0].name = "enhancement"  # Asegúrate de que el nombre del label sea una cadena
     repo2.get_issues.return_value = [issue2]
 
     repo2.get_languages.return_value = {"Python": fake.random_int(min=1000, max=5000), "TypeScript": fake.random_int(min=500, max=3000)}
