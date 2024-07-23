@@ -18,6 +18,12 @@ class RepositoryService:
         self.github_client = my_git
 
     def get_repositories_from_github(self) -> List:
+        '''
+        Obtiene los repositorios mediante la api de Github.
+
+        Returns:
+            List: Una lista de diccionarios, donde cada diccionario contiene la información de un repositorio.
+        '''
         try:
             user = self.github_client.get_user()
             return user.get_repos()
@@ -25,6 +31,15 @@ class RepositoryService:
             raise HTTPException(status_code=500, detail=f"Error al obtener los repositorios: {e}")
 
     def get_last_commit_date(self, repository) -> datetime:
+        '''
+        Obtiene la fecha del ultimo commit realizado en un repositorio.
+
+        Args:
+            "repository": Necesita tener un repositorio para obtener la fecha de su ultimo commit.
+
+        Returns:
+            Datetime: La fecha del ultimo commit.
+        '''
         try:
             commits = repository.get_commits()
             return commits[0].commit.committer.date if commits else None
@@ -33,6 +48,15 @@ class RepositoryService:
             return None
 
     def get_repository_state(self, repository) -> str:
+        '''
+        Obtiene el estado de un repositorio en base a su ultimo commit.
+
+        Args:
+            "repository": Necesita tener un repositorio para obtener el estado del repositorio.
+            
+        Returns:
+            String: El estado de un repositorio (solo en el proyecto).
+        '''
         try:
             fecha_actual = datetime.now()
             date_last_commit = self.get_last_commit_date(repository)
@@ -45,6 +69,15 @@ class RepositoryService:
             return "No hay commits"
 
     def count_state_repositories(self, repos) -> Tuple[int, int]:
+        '''
+        Cuenta el total de los repositorios con su respectivo estado.
+
+        Args:
+            "repos": Necesita tener una lista de repositorios para contar.
+            
+        Returns:
+            Tuple: Una tupla con el conteo de los repositorios.
+        '''
         active_count = inactive_count = 0
         for repository in repos:
             state = self.get_repository_state(repository)
@@ -55,6 +88,13 @@ class RepositoryService:
         return active_count, inactive_count
 
     def get_repositories(self) -> List[Repositories]:
+        '''
+        Obtiene todos los repositorios.
+            
+        Returns:
+            List: Retornara una lista de repositorios y a su vez cada repositorio
+            mostrara una lista con sus detalles.
+        '''
         try:
             repos = self.get_repositories_from_github()
             repositories = []
@@ -71,6 +111,12 @@ class RepositoryService:
             raise HTTPException(status_code=500, detail=f"Error al obtener los repositorios: {e}")
 
     def get_statistics_of_repositories(self) -> RepositoriesStats:
+        '''
+        Obtiene las estadisticas o conteos totales de todos los repositorios.
+
+        Returns:
+            RepositoriesStats: Un modelo que contiene los conteos de los detalles de un repositorio.
+        '''
         try:
             repos = self.get_repositories_from_github()
             total_bytes_by_language = {}
@@ -130,6 +176,15 @@ class RepositoryService:
             raise HTTPException(status_code=500, detail=f"Error al obtener estadísticas del repositorio: {e}")
 
     def get_repository_detail(self, repo_name: str) -> Repository:
+        '''
+        Muestra los detalles del repositorio.
+
+        Args:
+            "repo_name": Necesita tener el nombre del repositorio para acceder a sus detalles.
+            
+        Returns:
+            Repository: Un modelo que contiene los atributos del repositorio.
+        '''
         try:
             repos = self.get_repositories_from_github()
         except Exception as e:
@@ -181,6 +236,16 @@ class RepositoryService:
         raise HTTPException(status_code=404, detail=f"El repositorio '{repo_name}' no existe")
 
     def get_statistics_by_detail(self, repo_name: str) -> RepositoryStats:
+        '''
+        Muestra las estadisticas o conteos de los detalles del repositorio.
+
+        Args:
+            "repo_name": Necesita tener el nombre del repositorio, 
+            para obtener las estadisticas del repositorio.
+            
+        Returns:
+            RepositoryStats: Un modelo que contiene los atributos del repositorio.
+        '''
         try:
             repos = self.get_repositories_from_github()
             found_repo = next((repo for repo in repos if repo.name == repo_name), None)
@@ -221,5 +286,5 @@ class RepositoryService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error al obtener estadísticas detalladas del repositorio: {e}")
 
-# Asignar el servicio a una variable para ser usado con el enrutador
+
 repository_service = RepositoryService()
