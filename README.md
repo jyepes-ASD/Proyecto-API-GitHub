@@ -42,10 +42,10 @@ my_git = Github(mytoken)
 Luego crea otro ficherro llamado __.env__ en la carpeta __Proyecto-API-GitHub__ 
 ```bash
 
-GITHUB_CLIENT_ID=Ov23li3cAP3apdW0y0qy
-GITHUB_CLIENT_SECRET=d73e1932b2f104d07e9f26ec1672076ebcfbdbdf
-SECRET_KEY=Colombia2024*
-
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+SECRET_KEY=
+ORG_NAME=Grupo-ASD
 ```
 
 # Navegar al directorio del proyecto
@@ -73,7 +73,7 @@ pip install -r requirements.txt
 
 # Ejecutar la aplicación
 ```bash
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 ## Probleas_Comunes
